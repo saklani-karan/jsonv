@@ -1,6 +1,6 @@
-# VJSON Module
+# JSONV Module
 
-The VJSON module is a TypeScript class that allows you to load and parse Variable JSON (VJSON) objects, which are JSON objects containing variables. This module enables you to inject variables into the loaded VJSON file at runtime.
+The jsonv module is a TypeScript class that allows you to load and parse Variable JSON (JSONV) objects, which are JSON objects containing variables. This module enables you to inject variables into the loaded jsonv file at runtime.
 
 ## Table of Contents
 
@@ -14,30 +14,30 @@ The VJSON module is a TypeScript class that allows you to load and parse Variabl
 
 ## Installation
 
-To use the VJSON module in your TypeScript project, you can install it via npm:
+To use the JSONV module in your TypeScript project, you can install it via npm:
 
 ```bash
-npm install vjson
+npm install jsonv
 ```
 
 ## Usage
 
-To use the VJSON module in your TypeScript project, follow these steps:
+To use the jsonv module in your TypeScript project, follow these steps:
 
-1. Install the VJSON module via npm:
+1. Install the jsonv module via npm:
 
    ```bash
-   npm install vjson
+   npm install jsonv
    ```
 
-2. Import the VJSON class if you are parsing strings directly, otherwise import the load method to parse vjson files
+2. Import the jsonv class if you are parsing strings directly, otherwise import the load method to parse jsonv files
     ```typescript
     // import for loading strings which contain variables in json format
-    import { VJSON } from 'vjson';
+    import { JSONV } from 'jsonv';
     ```
 
     ```typescript
-    // import 'load' method for importing directly from a .vjson file
-    import { load } from "vjson";
+    // import 'load' method for importing directly from a .jsonv file
+    import { load } from "jsonv";
     ```
 
