@@ -8,29 +8,29 @@ let falseRemBoolean: string = "alse";
 let nullRemString: string = "ull";
 
 /**
- * Loads file from file path. File path must be a valid vjson file (extension .vjson). Return VJSON object
+ * Loads file from file path. File path must be a valid jsonv file (extension .jsonv). Return JSONV object
  * @param {string} filePath
- * @returns {VJSON}
+ * @returns {JSONV}
  */
-export function load(filePath: string): VJSON {
+export function load(filePath: string): JSONV {
     let matches = fileExtensionRegex.exec(filePath);
     if (matches.length < 3) {
         throw new Error("Invalid file path");
     }
-    if (matches[2].toLowerCase() !== "vjson") {
-        throw new Error(`Extension of the file must be 'vjson'`);
+    if (matches[2].toLowerCase() !== "jsonv") {
+        throw new Error(`Extension of the file must be 'jsonv'`);
     }
-    return new VJSON(readFileSync("./test.vjson").toString("utf-8"));
+    return new JSONV(readFileSync("./test.jsonv").toString("utf-8"));
 }
 
 /**
- * Represents a class for parsing and injecting variables into variable JSON objects (VJSON).
+ * Represents a class for parsing and injecting variables into variable JSON objects (JSONV).
  */
-export class VJSON {
+export class JSONV {
     private variableKeyPathMap: Map<string, string[][]> = new Map();
     private object: any = null;
     /**
-     * Creates a new instance of the VJSON class by parsing the provided input string.
+     * Creates a new instance of the JSONV class by parsing the provided input string.
      * @param {string} input - The input string to parse.
      */
     constructor(input: string) {
@@ -379,9 +379,9 @@ export class VJSON {
     }
 
     /**
-     * Injects variables into the parsed VJSON object.
+     * Injects variables into the parsed JSONV object.
      * @param {Record<string, any>} injectedVariables - An object containing variables to inject.
-     * @returns {any} - The parsed VJSON object with injected variables.
+     * @returns {any} - The parsed JSONV object with injected variables.
      * @throws {Error} - Throws an error if any injected variables are missing.
      */
     inject(injectedVariables: Record<string, any>): any {

@@ -1,14 +1,14 @@
 {
-    "name": "vjson",
+    "name": "jsonv",
     "version": "1.0.0",
-    "description": "",
+    "description": "JSONV, or Variable JSON, is a specialized JSON-like format that allows for the inclusion of variables within JSON objects, making it ideal for dynamic data handling and configuration.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "npx tsc"
     },
-    "author": "",
+    "author": "Karan Saklani",
     "license": "ISC",
     "dependencies": {},
     "devDependencies": {
