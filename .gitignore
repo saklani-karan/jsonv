@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # test file
-test.vjson
+test.jsonv
