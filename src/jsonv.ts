@@ -14,13 +14,14 @@ let nullRemString: string = "ull";
  */
 export function load(filePath: string): JSONV {
     let matches = fileExtensionRegex.exec(filePath);
+    console.log(matches);
     if (matches.length < 3) {
         throw new Error("Invalid file path");
     }
     if (matches[2].toLowerCase() !== "jsonv") {
         throw new Error(`Extension of the file must be 'jsonv'`);
     }
-    return new JSONV(readFileSync("./test.jsonv").toString("utf-8"));
+    return new JSONV(readFileSync(filePath).toString("utf-8"));
 }
 
 /**
@@ -236,7 +237,7 @@ export class JSONV {
                                 charStack.push(char);
                             }
                         } else if (valueType === "number") {
-                            if (char >= "0" && char <= "9") {
+                            if ((char >= "0" && char <= "9") || char == ".") {
                                 charStack.push(char);
                             } else if (
                                 char === "," ||
@@ -306,17 +307,37 @@ export class JSONV {
                             iterator++;
                             continue;
                         }
+                        let typedValue: any = value;
+                        switch (valueType) {
+                            case "boolean":
+                                if (value === "true") {
+                                    typedValue = true;
+                                } else {
+                                    typedValue = false;
+                                }
+                                break;
+                            case "null":
+                                typedValue = null;
+                                break;
+                            case "number":
+                                if (value.includes(".")) {
+                                    typedValue = Number.parseFloat(value);
+                                } else {
+                                    typedValue = Number.parseInt(value);
+                                }
+                                break;
+                        }
                         if (char === ",") {
                             if (objectType === "object") {
                                 isKey = false;
                                 isValue = false;
-                                res[key] = value;
+                                res[key] = typedValue;
                                 valueType = null;
                                 key = null;
                                 value = null;
                             } else {
                                 isValue = true;
-                                res.push(value);
+                                res.push(typedValue);
                                 key = res.length;
                                 isKey = false;
                                 valueType = null;
@@ -330,7 +351,7 @@ export class JSONV {
                             isKey = false;
                             isValue = false;
                             isOpen = false;
-                            res[key] = value;
+                            res[key] = typedValue;
                             break;
                         } else if (char === "]" && objectType === "array") {
                             let top: string = charStack.pop();
@@ -340,7 +361,7 @@ export class JSONV {
                             isKey = false;
                             isValue = false;
                             isOpen = false;
-                            res.push(value);
+                            res.push(typedValue);
                             break;
                         } else {
                             throw new Error(`error at index ${iterator}`);
