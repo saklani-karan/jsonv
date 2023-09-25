@@ -28,13 +28,18 @@ export function load(filePath: string): JSONV {
 export class JSONV {
     private variableKeyPathMap: Map<string, string[][]> = new Map();
     private object: any = null;
+    private objectType: string;
     /**
      * Creates a new instance of the JSONV class by parsing the provided input string.
      * @param {string} input - The input string to parse.
      */
     constructor(input: string) {
-        let { res, endIdx } = this.parseObject(input, this.variableKeyPathMap);
+        let { res, objectType } = this.parseObject(
+            input,
+            this.variableKeyPathMap
+        );
         this.object = res;
+        this.objectType = objectType;
     }
 
     /**
@@ -54,6 +59,7 @@ export class JSONV {
     ): {
         res: any;
         endIdx: number;
+        objectType: string;
     } {
         input = input.trim();
         let isKey: boolean = false,
@@ -394,6 +400,7 @@ export class JSONV {
         return {
             res,
             endIdx: iterator,
+            objectType,
         };
     }
 
@@ -405,7 +412,8 @@ export class JSONV {
      */
     inject(injectedVariables: Record<string, any>): any {
         let foundVariables: Set<string> = new Set();
-        let copyObject = { ...this.object };
+        let copyObject: any =
+            this.objectType === "array" ? [...this.object] : { ...this.object };
         Object.keys(injectedVariables).forEach((variable: string) => {
             if (!this.variableKeyPathMap.has(variable)) {
                 return;
