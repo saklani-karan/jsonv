@@ -1,6 +1,6 @@
 {
     "name": "jsonv",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "JSONV, or Variable JSON, is a specialized JSON-like format that allows for the inclusion of variables within JSON objects, making it ideal for dynamic data handling and configuration.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
