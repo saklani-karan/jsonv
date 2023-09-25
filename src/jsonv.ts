@@ -2,7 +2,6 @@ import { readFileSync } from "fs";
 
 const formatting = new RegExp("\t|\n|\r|\\s+", "i");
 const variableNameRegex = new RegExp("^([a-zA-Z_$][a-zA-Zd_$]*)$");
-let fileExtensionRegex: RegExp = /^.*\/(.*)\.(.*)$/g;
 let trueRemBoolean: string = "rue";
 let falseRemBoolean: string = "alse";
 let nullRemString: string = "ull";
@@ -13,9 +12,8 @@ let nullRemString: string = "ull";
  * @returns {JSONV}
  */
 export function load(filePath: string): JSONV {
-    let matches = fileExtensionRegex.exec(filePath);
-    console.log(matches);
-    if (matches.length < 3) {
+    let matches = new RegExp(/^.*\/(.*)\.(.*)$/g).exec(filePath);
+    if (!matches.length || matches.length < 3) {
         throw new Error("Invalid file path");
     }
     if (matches[2].toLowerCase() !== "jsonv") {
@@ -407,6 +405,7 @@ export class JSONV {
      */
     inject(injectedVariables: Record<string, any>): any {
         let foundVariables: Set<string> = new Set();
+        let copyObject = { ...this.object };
         Object.keys(injectedVariables).forEach((variable: string) => {
             if (!this.variableKeyPathMap.has(variable)) {
                 return;
@@ -415,7 +414,7 @@ export class JSONV {
             let paths: string[][] = this.variableKeyPathMap.get(variable);
             paths.forEach((path: string[]) => {
                 this.setValueByPath(
-                    this.object,
+                    copyObject,
                     path,
                     injectedVariables[variable]
                 );
@@ -426,7 +425,7 @@ export class JSONV {
         ) {
             throw new Error("Missing variables found");
         }
-        return this.object;
+        return copyObject;
     }
 
     /**
