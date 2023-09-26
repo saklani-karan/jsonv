@@ -22,11 +22,23 @@ export function load(filePath: string): JSONV {
     return new JSONV(readFileSync(filePath).toString("utf-8"));
 }
 
+enum CommandType {
+    "CONDITIONAL",
+    "EXEC",
+}
+const commands: Record<string, CommandType> = {
+    $if: CommandType.CONDITIONAL,
+    $elseif: CommandType.CONDITIONAL,
+    $else: CommandType.CONDITIONAL,
+    $unset: CommandType.EXEC,
+};
+
 /**
  * Represents a class for parsing and injecting variables into variable JSON objects (JSONV).
  */
 export class JSONV {
     private variableKeyPathMap: Map<string, string[][]> = new Map();
+    private unsetVariables: Set<string> = new Set();
     private object: any = null;
     private objectType: string;
     /**
@@ -300,7 +312,12 @@ export class JSONV {
                                 }
                                 variablePaths.push([...path, key.toString()]);
                                 variableMap.set(value, variablePaths);
-                                value = "#" + value;
+                                if (process.env[value]) {
+                                    value = process.env[value];
+                                } else {
+                                    this.unsetVariables.add(value);
+                                    value = "#" + value;
+                                }
                                 continue;
                             } else {
                                 charStack.push(char);
@@ -411,14 +428,16 @@ export class JSONV {
      * @throws {Error} - Throws an error if any injected variables are missing.
      */
     inject(injectedVariables: Record<string, any>): any {
-        let foundVariables: Set<string> = new Set();
+        let localUnsetVariables: Set<string> = new Set([
+            ...this.unsetVariables,
+        ]);
         let copyObject: any =
             this.objectType === "array" ? [...this.object] : { ...this.object };
         Object.keys(injectedVariables).forEach((variable: string) => {
             if (!this.variableKeyPathMap.has(variable)) {
                 return;
             }
-            foundVariables.add(variable);
+            localUnsetVariables.delete(variable);
             let paths: string[][] = this.variableKeyPathMap.get(variable);
             paths.forEach((path: string[]) => {
                 this.setValueByPath(
@@ -428,9 +447,7 @@ export class JSONV {
                 );
             });
         });
-        if (
-            foundVariables.size !== [...this.variableKeyPathMap.keys()].length
-        ) {
+        if (localUnsetVariables.size) {
             throw new Error("Missing variables found");
         }
         return copyObject;

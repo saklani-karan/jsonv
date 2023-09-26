@@ -1,6 +1,6 @@
 {
     "name": "jsonvar",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "JSONV, or Variable JSON, is a specialized JSON-like format that allows for the inclusion of variables within JSON objects, making it ideal for dynamic data handling and configuration.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -9,11 +9,13 @@
         "build": "npx tsc"
     },
     "author": "Karan Saklani",
-    "license": "ISC",
-    "dependencies": {},
+    "license": "MIT",
     "devDependencies": {
         "@types/node": "^20.5.9",
-        "typescript": "^5.2.2",
-        "node": "^20.5.1"
+        "node": "^20.5.1",
+        "typescript": "^5.2.2"
+    },
+    "repository": {
+        "url": "https://github.com/saklani-karan/jsonv"
     }
 }
