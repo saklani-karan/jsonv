@@ -43,3 +43,27 @@ To use the jsonv module in your TypeScript project, follow these steps:
     ```
 
 3. Load the jsonv file
+
+    To load the file directly, we can use the load method from the jsonvar module. The object returned from the load method is an instance of the class JSONV that contains the validated stub object and the mapping from the variable name to the path reference within the stub object.
+
+    In case, the variable JSON also has to be loaded from a string, a new instance of the JSONV class can be created directly by calling the constructor of the class which accepts a string as an argument.
+
+    ```typescript
+    import { load, JSONV } from "jsonvar";
+    // load from a file
+    const variableJSONLoadedFromFile: JSONV = load(
+        "./cancelled-orders-for-users.jsonv"
+    );
+    // create from a string
+    const variableJSONFromAString: JSONV = new JSONV('{"active":#active}');
+    ```
+
+4. Injecting variables on runtime
+
+    To inject variables into the stub object, use the inject method which takes an object as an argument.
+
+    ```typescript
+    import { load } from "jsonvar";
+    // load from a file
+    const variableJSON: JSONV = load("./cancelled-orders-for-users.jsonv");
+    ```
