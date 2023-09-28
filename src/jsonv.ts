@@ -151,7 +151,10 @@ export class JSONV {
                         if (char === '"') {
                             valueType = "string";
                             charStack.push(char);
-                        } else if (char >= "0" && char <= "9") {
+                        } else if (
+                            (char >= "0" && char <= "9") ||
+                            char == "-"
+                        ) {
                             valueType = "number";
                             charStack.push(char);
                         } else if (char === "t" || char === "f") {
@@ -264,7 +267,10 @@ export class JSONV {
                                 let top: string = charStack.pop();
                                 let stackPopCounter: number = 0;
                                 value = "";
-                                while (top >= "0" && top <= "9") {
+                                while (
+                                    (top >= "0" && top <= "9") ||
+                                    top == "-"
+                                ) {
                                     if (!charStack.length) {
                                         throw new Error(
                                             `error at index ${
